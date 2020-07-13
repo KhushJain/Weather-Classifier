@@ -73,8 +73,8 @@ print("[INFO] loading images...")
 imagePaths = sorted(list(paths.list_images("dataset")))
 random.seed(42)
 random.shuffle(imagePaths)
-# count = 0
-# errorPath = []
+count = 0
+errorPath = []
 # loop over the input images
 for imagePath in imagePaths:
 	# load the image, pre-process it, and store it in the data list
@@ -132,36 +132,12 @@ H = model.fit_generator(
 	steps_per_epoch=len(trainX) // BS,
 	epochs=EPOCHS, verbose=1, callbacks=callbacks_list)
 
-# # save the model to disk
-# print("[INFO] serializing network...")
-# model.save("/content/model.h5")
+# evaluate
+result = model.evaluate(testX, testY, batch_size=128)
+print(result)
 
 # save the label binarizer to disk
 print("[INFO] serializing label binarizer...")
 f = open("/content/lb.pickle", "wb")
 f.write(pickle.dumps(lb))
 f.close()
-
-
-# Testing on a custom image
-
-from tensorflow.keras.models import load_model
-model = load_model('/content/model.h5')
-result = model.evaluate(testX, testY, batch_size=128)
-print(result)
-
-# load the image
-image = cv2.imread('Cloud_2.jpg')
-# output = image.copy()
- 
-# pre-process the image for classification
-image = cv2.resize(image, (256, 256))
-image = image.astype("float") / 255.0
-image = img_to_array(image)
-image = np.expand_dims(image, axis=0)
-
-print("[INFO] classifying image...")
-proba = model.predict(image)[0]
-idx = np.argmax(proba)
-label = lb.classes_[idx]
-print("Output: ", label, "Probability: ", proba[idx] * 100)
