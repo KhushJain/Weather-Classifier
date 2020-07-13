@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="{% static 'index.js' %}"></script>
+    <title>Classifer</title>
+</head>
+<body style="  background: url('https://source.unsplash.com/twukN12EN7c/1920x1080') no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                background-size: cover;
+                -o-background-size: cover;">
+    <h2 style="text-align: center; margin-top:1%; color:darkred">Image Classifies into: Cloudy, Foggy, Rainy, Shine, Sunrise</h1>
+    <div style="text-align: center; margin-top:2%;">
+        {% if label %}<h2>{{ label.capitalize }}{% endif %}
+        {% if filePathName %}
+        <img class="img-fluid img-thumbnail" src={{filePathName}} alt='imagename' width="100" height="100"></h2>
+        {% endif %}
+    </div>
+    <form method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="frame">
+            <div class="center">
+                <div class="title">
+                    <h1>Drop file to upload</h1>
+                </div>
+        
+                <div class="dropzone">
+                    <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon" />
+                    <input name="filePath" type="file" class="upload-input" required/>
+                </div>
+        
+                <button type="submit" class="btn" name="uploadbutton">Upload file</button>
+        
+            </div>
+        </div>
+    </form>
+    
+</body>
+</html>
